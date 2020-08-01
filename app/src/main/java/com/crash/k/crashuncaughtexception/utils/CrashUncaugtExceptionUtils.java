@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Looper;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -15,11 +13,6 @@ import com.crash.k.crashuncaughtexception.ErroActivity;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.lang.Thread.UncaughtExceptionHandler;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * Created by K on 2015/12/21.

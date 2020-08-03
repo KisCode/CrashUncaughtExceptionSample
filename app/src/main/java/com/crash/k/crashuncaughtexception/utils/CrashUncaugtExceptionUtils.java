@@ -3,11 +3,9 @@ package com.crash.k.crashuncaughtexception.utils;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.crash.k.crashuncaughtexception.ErroActivity;
 
@@ -19,35 +17,35 @@ import java.io.StringWriter;
  */
 public class CrashUncaugtExceptionUtils {
 
-    public final static String EXTRA_STRACE_MESSAGE="extra_strace_message";
-    private static final String TAG="CrashException";
+    public final static String EXTRA_STRACE_MESSAGE = "extra_strace_message";
+    private static final String TAG = "CrashException";
 
-    /**设置传递错误堆栈信息最大长度 保证不超过128 KB*/
+    /**
+     * 设置传递错误堆栈信息最大长度 保证不超过128 KB
+     */
     private static final int MAX_STACK_TRACE_SIZE = 131071; //128 KB - 1
 
-    private static Context mContext;
     private static Application application;
 
-     /**
+    /**
      * 初始化
      */
-    public static void install(Context context){
+    public static void install(Context context) {
 
-//设置该线程由于未捕获到异常而突然终止时调用的处理程序
-Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-    @Override
-    public void uncaughtException(Thread thread, Throwable throwable) {
-        //处理异常,我们还可以把异常信息写入文件，以供后来分析。
-        String stackTraceString = getThrowableStraceStr(thread, throwable);
-        Log.e(TAG,stackTraceString);
+        //设置该线程由于未捕获到异常而突然终止时调用的处理程序
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread thread, Throwable throwable) {
+                //处理异常,我们还可以把异常信息写入文件，以供后来分析。
+                String stackTraceString = getThrowableStraceStr(thread, throwable);
+                Log.e(TAG, stackTraceString);
 
-        startErroActivity(stackTraceString);
-        killCurrentProcess();
-    }
-});
+                startErroActivity(stackTraceString);
+                killCurrentProcess();
+            }
+        });
 
-        mContext=context;
-        application=(Application)context.getApplicationContext();
+        application = (Application) context.getApplicationContext();
         application.registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle bundle) {
@@ -62,8 +60,8 @@ Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() 
 
             @Override
             public void onActivityResumed(Activity activity) {
-                Thread.UncaughtExceptionHandler unCaughtExceptionHandler= Thread.getDefaultUncaughtExceptionHandler();
-                Log.i("LifecycleCallbacks",activity.getClass().getName()+"-->\n"+ unCaughtExceptionHandler.getClass().getName() + "");
+                Thread.UncaughtExceptionHandler unCaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
+                Log.i("LifecycleCallbacks", activity.getClass().getName() + "-->\n" + unCaughtExceptionHandler.getClass().getName() + "");
             }
 
             @Override
@@ -99,14 +97,15 @@ Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() 
         }
 
         //启动错误页面
-        Intent intent=new Intent(application,ErroActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.putExtra(EXTRA_STRACE_MESSAGE,straceMsg);
+        Intent intent = new Intent(application, ErroActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra(EXTRA_STRACE_MESSAGE, straceMsg);
         application.startActivity(intent);
     }
 
     /**
      * 获取此 throwable 及其追踪信息
+     *
      * @param thread
      * @param throwable
      * @return
@@ -140,7 +139,6 @@ Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() 
         }
         return null;
     }
-
 
 
     /**

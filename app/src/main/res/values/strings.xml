@@ -1,5 +1,4 @@
 <resources>
 	<string name="app_name">CrashUncaughtException</string>
-	<string name="title_activity_b">BActivity</string>
-	<string name="title_activity_c">ErroActivity</string>
+    <string name="title_activity_c">ErroActivity</string>
 </resources>

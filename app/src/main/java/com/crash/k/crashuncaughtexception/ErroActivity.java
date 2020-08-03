@@ -19,6 +19,11 @@ import java.util.Locale;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+/**
+ * Description：错误信息页面
+ * Author: Kris Keno
+ * Date : 2015/12/21
+ **/
 public class ErroActivity extends AppCompatActivity {
 
     private Context mContext;
@@ -33,56 +38,52 @@ public class ErroActivity extends AppCompatActivity {
         initViews();
     }
 
-    private void initData(){
-        mContext=this;
-        String erroInfo= getIntent().getStringExtra(CrashUncaugtExceptionUtils.EXTRA_STRACE_MESSAGE);
-        mErroDetailsStr=getErroDetailsInfo()+"\n strace \n"+erroInfo;
+    private void initData() {
+        mContext = this;
+        String erroInfo = getIntent().getStringExtra(CrashUncaugtExceptionUtils.EXTRA_STRACE_MESSAGE);
+        mErroDetailsStr = getErroDetailsInfo() + "\n strace \n" + erroInfo;
     }
 
-    private void initViews()
-    {
-        Button btnRestart=(Button)findViewById(R.id.btn_restart);
+    private void initViews() {
+        Button btnRestart = (Button) findViewById(R.id.btn_restart);
         btnRestart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Class launcherActivity= CrashUncaugtExceptionUtils.getLauncherActivity(mContext);
+                Class launcherActivity = CrashUncaugtExceptionUtils.getLauncherActivity(mContext);
 
-                if(launcherActivity!=null)
-                {
-                    Intent intent=new Intent(mContext,launcherActivity);
+                if (launcherActivity != null) {
+                    Intent intent = new Intent(mContext, launcherActivity);
                     startActivity(intent);
                     finish();
-                }else{
-                    Toast.makeText(mContext,"重启失败了",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(mContext, "重启失败了", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        TextView tvInfo=(TextView)findViewById(R.id.tv_erro_info);
+        TextView tvInfo = (TextView) findViewById(R.id.tv_erro_info);
         tvInfo.setText(mErroDetailsStr);
     }
 
-    /**获取错误信息
+    /**
+     * 获取错误信息
      *
-     * @param thread
-     * @param throwable
-     * @return
+     * @return 错误信息
      */
-    private String getErroDetailsInfo()
-    {
-        String erroDetailInfo="";
+    private String getErroDetailsInfo() {
+        String erroDetailInfo = "";
         //设备名称
-        erroDetailInfo+="DeviceName:"+ AppInfoUtils.getDeviceModelName()+ " \n";
+        erroDetailInfo += "DeviceName:" + AppInfoUtils.getDeviceModelName() + " \n";
         //版本号
-        erroDetailInfo+="VersionName:"+AppInfoUtils.getVersionName(mContext)+ " \n";
+        erroDetailInfo += "VersionName:" + AppInfoUtils.getVersionName(mContext) + " \n";
 
-        DateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
         //记录当前出错时间
-        erroDetailInfo+="currentTime"+dateFormat.format(new Date())+ " \n";
+        erroDetailInfo += "currentTime" + dateFormat.format(new Date()) + " \n";
 
         //安装时间
-        erroDetailInfo+="BuildTime:"+AppInfoUtils.getBuildDateAsString(mContext,dateFormat)+ " \n";
+        erroDetailInfo += "BuildTime:" + AppInfoUtils.getBuildDateAsString(mContext, dateFormat) + " \n";
 
-        return  erroDetailInfo;
+        return erroDetailInfo;
     }
 }
